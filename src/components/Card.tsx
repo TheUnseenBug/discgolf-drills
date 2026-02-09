@@ -14,11 +14,11 @@ export function Card({ drill, children, className = "" }: CardProps) {
   const { setSelectedCategory } = useDrillStore();
   return (
     <div
-      className={`flex flex-col divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-sm h-full ${className}`}
+      className={`flex flex-col divide-y divide-gray-200 overflow-hidden rounded-lg bg-gray-300 shadow-sm h-full ${className}`}
     >
       <div className="px-4 py-5 sm:px-6">
         {drill.name && (
-          <h3 className="mb-2 text-lg font-semibold text-gray-900">
+          <h3 className="mb-2 text-sm lg:text-lg md:text-md font-semibold text-gray-900">
             {drill.name}
           </h3>
         )}
@@ -40,11 +40,7 @@ export function Card({ drill, children, className = "" }: CardProps) {
       </div>
 
       <div className="flex flex-col flex-1 px-4 py-4 sm:px-6">
-        <div className="text-gray-700 flex-1">{children}</div>
-
-        <h3 className="mt-3 text-lg font-semibold text-gray-900">
-          {useMinutesSeconds(drill.length).formatted}
-        </h3>
+        <div className=" text-sm md:text-md  flex-1">{children}</div>
       </div>
     </div>
   );
