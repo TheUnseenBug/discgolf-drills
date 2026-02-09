@@ -30,7 +30,7 @@ function App() {
         {isLoading ? (
           <div className="text-center py-8">Loading drills...</div>
         ) : (
-          <ul className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-5 gap-4">
+          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {filteredDrills.map((drill: Drill) => (
               <li key={drill.id}>
                 <Card drill={drill}>{drill.description}</Card>

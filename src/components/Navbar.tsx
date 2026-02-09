@@ -9,14 +9,13 @@ import { useDrillStore } from "../store/useDrillStore";
 
 const categories = [
   { name: "All" },
+  { name: "Everything" },
+  { name: "Speed" },
+  { name: "Spin" },
   { name: "Brace" },
-  { name: "Rounding" },
   { name: "Coil" },
-  { name: "Reach Back" },
-  { name: "Follow Through" },
-  { name: "Weight Shift" },
-  { name: "Footwork" },
-  { name: "Grip" },
+  { name: "Elbow" },
+  { name: "Off Arm" },
 ];
 
 function classNames(...classes: string[]) {
