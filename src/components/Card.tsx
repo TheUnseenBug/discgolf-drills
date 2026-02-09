@@ -1,7 +1,6 @@
 import { type ReactNode } from "react";
 import type { Drill } from "../types/drill";
 import { YouTubeEmbed } from "./YoutubeEmbed";
-import { useMinutesSeconds } from "../services/timeConverter";
 import { useDrillStore } from "../store/useDrillStore";
 
 type CardProps = {
