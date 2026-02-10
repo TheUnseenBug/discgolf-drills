@@ -5,17 +5,19 @@ import supabase from "../services/supabase";
 interface DrillStore {
   drills: Drill[];
   selectedCategory: string | null;
+  searchQuery: string;
   isLoading: boolean;
   error: string | null;
 
   fetchDrills: () => Promise<void>;
   setSelectedCategory: (category: string | null) => void;
-  getFilteredDrills: () => Drill[];
+  setSearchQuery: (query: string) => void;
 }
 
-export const useDrillStore = create<DrillStore>((set, get) => ({
+export const useDrillStore = create<DrillStore>((set) => ({
   drills: [],
   selectedCategory: null,
+  searchQuery: "",
   isLoading: false,
   error: null,
 
@@ -33,9 +35,5 @@ export const useDrillStore = create<DrillStore>((set, get) => ({
 
   setSelectedCategory: (category) => set({ selectedCategory: category }),
 
-  getFilteredDrills: () => {
-    const { drills, selectedCategory } = get();
-    if (!selectedCategory) return drills;
-    return drills.filter((drill) => drill.category === selectedCategory);
-  },
+  setSearchQuery: (query) => set({ searchQuery: query }),
 }));

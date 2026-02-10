@@ -9,19 +9,28 @@ function App() {
   const fetchDrills = useDrillStore((state) => state.fetchDrills);
   const drills = useDrillStore((state) => state.drills);
   const selectedCategory = useDrillStore((state) => state.selectedCategory);
+  const searchQuery = useDrillStore((state) => state.searchQuery);
   const isLoading = useDrillStore((state) => state.isLoading);
 
   useEffect(() => {
     fetchDrills();
   }, [fetchDrills]);
 
-  // Filter drills based on selected category
-  const filteredDrills = selectedCategory
-    ? drills.filter((drill) => drill.category === selectedCategory)
-    : drills;
+  // Apply both category and search filters
+  const filteredDrills = drills.filter((drill) => {
+    // Category filter
+    const matchesCategory = selectedCategory
+      ? drill.category === selectedCategory
+      : true;
 
-  console.log("Selected category:", selectedCategory);
-  console.log("Filtered drills:", filteredDrills);
+    // Search filter (searches name and description)
+    const matchesSearch = searchQuery
+      ? drill.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        drill.description?.toLowerCase().includes(searchQuery.toLowerCase())
+      : true;
+
+    return matchesCategory && matchesSearch;
+  });
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -29,8 +38,12 @@ function App() {
       <main className="flex-1 px-4 py-4">
         {isLoading ? (
           <div className="text-center py-8">Loading drills...</div>
+        ) : filteredDrills.length === 0 ? (
+          <div className="text-center py-8 text-gray-500">
+            No drills found. Try adjusting your search or category filter.
+          </div>
         ) : (
-          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          <ul className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-5 gap-4">
             {filteredDrills.map((drill: Drill) => (
               <li key={drill.id}>
                 <Card drill={drill}>{drill.description}</Card>

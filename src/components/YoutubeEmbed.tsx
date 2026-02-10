@@ -15,7 +15,7 @@ function parseYouTubeUrl(url: string): {
 
     // youtu.be/<id>
     if (parsed.hostname.includes("youtu.be")) {
-      videoId = parsed.pathname.slice(1);
+      videoId = parsed.pathname.slice(1).split("?")[0];
     }
 
     // youtube.com/watch?v=<id>
@@ -23,9 +23,46 @@ function parseYouTubeUrl(url: string): {
       videoId = parsed.searchParams.get("v");
     }
 
-    // timestamp (?t=26s or ?t=26)
+    // Parse timestamp
     const t = parsed.searchParams.get("t");
-    const start = t ? parseInt(t.replace("s", ""), 10) : undefined;
+    const startParam = parsed.searchParams.get("start");
+
+    let start: number | undefined;
+
+    if (t) {
+      // Handle formats like "7m5s", "26s", "2m", "125" (plain seconds)
+      const timeStr = t.toLowerCase();
+
+      // Check if it contains 'm' or 'h' (complex format)
+      if (timeStr.includes("m") || timeStr.includes("h")) {
+        let totalSeconds = 0;
+
+        // Extract hours
+        const hoursMatch = timeStr.match(/(\d+)h/);
+        if (hoursMatch) {
+          totalSeconds += parseInt(hoursMatch[1], 10) * 3600;
+        }
+
+        // Extract minutes
+        const minutesMatch = timeStr.match(/(\d+)m/);
+        if (minutesMatch) {
+          totalSeconds += parseInt(minutesMatch[1], 10) * 60;
+        }
+
+        // Extract seconds
+        const secondsMatch = timeStr.match(/(\d+)s/);
+        if (secondsMatch) {
+          totalSeconds += parseInt(secondsMatch[1], 10);
+        }
+
+        start = totalSeconds;
+      } else {
+        // Simple format: just "26s" or "26"
+        start = parseInt(timeStr.replace("s", ""), 10);
+      }
+    } else if (startParam) {
+      start = parseInt(startParam, 10);
+    }
 
     return { videoId, start };
   } catch {
@@ -48,9 +85,8 @@ export function YouTubeEmbed({
     );
   }
 
-  const src = `https://www.youtube.com/embed/${videoId}${
-    start ? `?start=${start}` : ""
-  }`;
+  const embedParams = start ? `?start=${start}` : "";
+  const src = `https://www.youtube.com/embed/${videoId}${embedParams}`;
 
   return (
     <div
