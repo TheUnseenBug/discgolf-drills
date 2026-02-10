@@ -43,7 +43,7 @@ function App() {
             No drills found. Try adjusting your search or category filter.
           </div>
         ) : (
-          <ul className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-5 gap-4">
+          <ul className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {filteredDrills.map((drill: Drill) => (
               <li key={drill.id}>
                 <Card drill={drill}>{drill.description}</Card>
